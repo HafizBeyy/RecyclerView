@@ -6,4 +6,37 @@
     android:layout_height="match_parent"
     tools:context=".UploadActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="119dp"
+        android:onClick="selectImgClicked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/selectimg" />
+
+    <EditText
+        android:id="@+id/commentEditText"
+        android:layout_width="219dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="91dp"
+        android:ems="10"
+        android:hint="Comment"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="95dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="60dp"
+        android:onClick="saveClicked"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="@+id/commentEditText"
+        app:layout_constraintStart_toStartOf="@+id/commentEditText"
+        app:layout_constraintTop_toBottomOf="@+id/commentEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>
