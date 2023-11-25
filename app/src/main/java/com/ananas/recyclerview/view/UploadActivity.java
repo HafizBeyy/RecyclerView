@@ -1,4 +1,4 @@
-package com.ananas.recyclerview;
+package com.ananas.recyclerview.view;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -23,7 +23,7 @@ import com.ananas.recyclerview.databinding.ActivityUploadBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 public class UploadActivity extends AppCompatActivity {
-    ActivityUploadBinding binding;
+    com.ananas.recyclerview.databinding.ActivityUploadBinding binding;
     ActivityResultLauncher<Intent> activityResultLauncher;
     ActivityResultLauncher<String> permissionLauncher;
     Uri selectedImg;

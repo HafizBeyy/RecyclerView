@@ -1,4 +1,4 @@
-package com.ananas.recyclerview;
+package com.ananas.recyclerview.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.ananas.recyclerview.R;
 
 public class MainActivity extends AppCompatActivity {
     @Override
