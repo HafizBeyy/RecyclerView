@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.room.Room;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,14 +20,21 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ananas.recyclerview.database.Dao;
+import com.ananas.recyclerview.database.Database;
 import com.ananas.recyclerview.databinding.ActivityUploadBinding;
+import com.ananas.recyclerview.entity.Upload;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.InputStream;
 
 public class UploadActivity extends AppCompatActivity {
     com.ananas.recyclerview.databinding.ActivityUploadBinding binding;
     ActivityResultLauncher<Intent> activityResultLauncher;
     ActivityResultLauncher<String> permissionLauncher;
     Uri selectedImg;
+    Database db;
+    Dao dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +43,14 @@ public class UploadActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         registerLauncher();
+        db = Room.databaseBuilder(UploadActivity.this, Database.class,"content").build();
+        dao = db.dao();
     }
 
     public void selectImgClicked(View v) {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
             if (ContextCompat.checkSelfPermission(UploadActivity.this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                // izin daha önce sorulmuş  ancak reddedilmiş
                 if (ActivityCompat.shouldShowRequestPermissionRationale(UploadActivity.this, Manifest.permission.READ_MEDIA_IMAGES)) {
                     // açıklama yapmak gerekirse yani izin mecbursa snackbar oluşturma
                     Snackbar.make(v, "Permission for take pics from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission", new View.OnClickListener() {
@@ -82,6 +93,13 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     public void saveClicked(View v) {
+if (selectedImg!=null){
+    byte[] imageBytes = uriToByteArray(selectedImg);
+Upload content = new Upload(binding.commentEditText.getText().toString(),imageBytes);
+dao.insert(content);
+}
+
+
 
     }
 
@@ -113,4 +131,20 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
     }
+private byte[] uriToByteArray(Uri imageUri){
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            if (inputStream!=null){
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            inputStream.close();
+            return bytes;
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+}
 }
