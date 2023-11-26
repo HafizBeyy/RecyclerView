@@ -43,7 +43,9 @@ public class UploadActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         registerLauncher();
-        db = Room.databaseBuilder(UploadActivity.this, Database.class,"content").build();
+        db = Room.databaseBuilder(UploadActivity.this, Database.class,"content")
+                .allowMainThreadQueries()
+                .build();
         dao = db.dao();
     }
 
@@ -94,9 +96,10 @@ public class UploadActivity extends AppCompatActivity {
 
     public void saveClicked(View v) {
 if (selectedImg!=null){
-    byte[] imageBytes = uriToByteArray(selectedImg);
-Upload content = new Upload(binding.commentEditText.getText().toString(),imageBytes);
+Upload content = new Upload(binding.commentEditText.getText().toString(),selectedImg.toString());
 dao.insert(content);
+Intent intent = new Intent(UploadActivity.this, MainActivity.class);
+startActivity(intent);
 }
 
 
@@ -131,20 +134,4 @@ dao.insert(content);
             }
         });
     }
-private byte[] uriToByteArray(Uri imageUri){
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            if (inputStream!=null){
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            inputStream.close();
-            return bytes;
-            }else{
-                return null;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-}
 }

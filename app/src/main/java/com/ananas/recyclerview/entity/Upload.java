@@ -15,10 +15,17 @@ public class Upload {
     @ColumnInfo(name = "comment")
     public String comment;
     @ColumnInfo(name = "image")
-    public byte[] image;
+    public String imageuri;
 
-    public Upload(String comment, byte[] image) {
+    public String getComment() {
+        return comment;
+    }
+    public String getImageuri(){
+        return imageuri;
+    }
+
+    public Upload(String comment, String imageuri) {
         this.comment = comment;
-        this.image = image;
+        this.imageuri = imageuri;
     }
 }
