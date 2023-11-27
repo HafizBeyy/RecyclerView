@@ -22,12 +22,16 @@ import com.ananas.recyclerview.entity.Upload;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-    ArrayList<Upload> uploadArrayList;
-    Adapter adapter;
+    List<Upload> uploadList;
     Database db;
     Dao dao;
+    CompositeDisposable compositeDisposable= new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,25 +40,20 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         db = Room.databaseBuilder(MainActivity.this, Database.class, "content")
-                .allowMainThreadQueries()
                 .build();
+             //   .allowMainThreadQueries()
         dao = db.dao();
-        uploadArrayList = new ArrayList<>();
-        getDatabaseData();
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(uploadArrayList);
-        binding.recyclerView.setAdapter(adapter);
-    }
+        compositeDisposable.add(dao.getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(MainActivity.this::handleResponse));
+        uploadList = new ArrayList<>();
 
-    private void getDatabaseData() {
-List<String> comments = dao.getComment();
-List<String> images = dao.getImage();
-        for (int i = 0; i < comments.size() ; i++) {
-String comment = comments.get(i);
-String imageuri = images.get(i);
-Upload upload = new Upload(comment,imageuri);
-      uploadArrayList.add(upload);
-        }
+    }
+    private void handleResponse(List<Upload> receivedUploadList){
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+      Adapter adapter = new Adapter(receivedUploadList);
+        binding.recyclerView.setAdapter(adapter);
     }
 
 
@@ -76,4 +75,9 @@ Upload upload = new Upload(comment,imageuri);
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
+    }
 }

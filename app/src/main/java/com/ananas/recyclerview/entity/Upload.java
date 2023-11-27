@@ -1,5 +1,6 @@
 package com.ananas.recyclerview.entity;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import androidx.room.ColumnInfo;
@@ -15,17 +16,9 @@ public class Upload {
     @ColumnInfo(name = "comment")
     public String comment;
     @ColumnInfo(name = "image")
-    public String imageuri;
-
-    public String getComment() {
-        return comment;
-    }
-    public String getImageuri(){
-        return imageuri;
-    }
-
-    public Upload(String comment, String imageuri) {
+    public String imageBlob;
+    public Upload(String comment, String imageBlob) {
         this.comment = comment;
-        this.imageuri = imageuri;
+        this.imageBlob = imageBlob;
     }
 }

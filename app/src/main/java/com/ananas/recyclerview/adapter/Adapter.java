@@ -1,6 +1,9 @@
 package com.ananas.recyclerview.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,12 +14,13 @@ import com.ananas.recyclerview.databinding.RecyclerRowBinding;
 import com.ananas.recyclerview.entity.Upload;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    ArrayList<Upload> uploadArrayList ;
+    List<Upload> uploadList ;
 
-    public Adapter(ArrayList<Upload> uploadArrayList) {
-        this.uploadArrayList = uploadArrayList;
+    public Adapter(List<Upload> uploadList) {
+        this.uploadList = uploadList;
     }
 
     @NonNull
@@ -28,13 +32,19 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-holder.recyclerRowBinding.imageView.setImageURI(Uri.parse(uploadArrayList.get(position).imageuri));
-holder.recyclerRowBinding.textView.setText(uploadArrayList.get(position).comment);
+holder.recyclerRowBinding.textView.setText(uploadList.get(position).comment);
+String imageBlob = uploadList.get(position).imageBlob;
+Bitmap imageBitmap = stringToBitmap(imageBlob);
+holder.recyclerRowBinding.imageView.setImageBitmap(imageBitmap);
+    }
+    private Bitmap stringToBitmap(String imageBlob){
+        byte[] amogus = Base64.decode(imageBlob,Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(amogus,0, amogus.length);
     }
 
     @Override
     public int getItemCount() {
-        return uploadArrayList.size();
+        return uploadList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
