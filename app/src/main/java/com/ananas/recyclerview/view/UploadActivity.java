@@ -63,9 +63,9 @@ public class UploadActivity extends AppCompatActivity {
     public void selectImgClicked(View v) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(UploadActivity.this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-                // izin daha önce sorulmuş  ancak reddedilmiş
+                // izin daha önce sorulmuş  ancak reddedilmiş demek oluyor bu bir kez reddedip sonra tekrar reddedilirse çıkar
                 if (ActivityCompat.shouldShowRequestPermissionRationale(UploadActivity.this, Manifest.permission.READ_MEDIA_IMAGES)) {
-                    // açıklama yapmak gerekirse yani izin mecbursa snackbar oluşturma
+                   
                     Snackbar.make(v, "Permission for take pics from gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
